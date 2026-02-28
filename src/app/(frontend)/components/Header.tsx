@@ -27,7 +27,7 @@ export async function Header() {
             }
 
             // Page reference
-            if (link.reference && typeof link.reference !== 'string') {
+            if (link.reference && typeof link.reference === 'object' && 'slug' in link.reference) {
               return (
                 <Link key={i} href={`/${link.reference.slug}`}>
                   {link.label}
