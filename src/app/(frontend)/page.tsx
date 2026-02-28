@@ -1,30 +1,18 @@
-import { headers as getHeaders } from 'next/headers.js'
 import { getPayload } from 'payload'
 import React from 'react'
+import Link from 'next/link'
 import './styles.css'
+import { Header } from './components/Header'
 
 import config from '@/payload.config'
 
 export default async function HomePage() {
-  const headers = await getHeaders()
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
 
   return (
     <div className="hero">
-      <nav className="navbar">
-        <div className="navbar-content">
-          <div className="logo">TrueRef</div>
-          <div className="nav-links">
-            <a href="#features">Features</a>
-            <a href="#about">About</a>
-            <a href={payloadConfig.routes.admin} target="_blank" rel="noopener noreferrer">
-              Admin
-            </a>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       <div className="hero-content">
         <div className="hero-main">
