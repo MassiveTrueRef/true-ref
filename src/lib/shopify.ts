@@ -32,7 +32,7 @@ export async function shopifyFetch<T>({
 
     const body = (await result.json()) as any
 
-    if (body.errors) {
+    if (body.errors && body.errors.length > 0) {
       throw body.errors[0]
     }
 
@@ -117,6 +117,14 @@ export async function getProduct(handle: string) {
             }
           }
         }
+        variants(first: 1) {
+          edges {
+            node {
+              id
+              availableForSale
+            }
+          }
+        }
       }
     }
   `
@@ -127,4 +135,98 @@ export async function getProduct(handle: string) {
   } catch (err) {
     return null
   }
+}
+
+export async function createCart() {
+  const query = `
+    mutation cartCreate {
+      cartCreate {
+        cart {
+          id
+          checkoutUrl
+        }
+      }
+    }
+  `
+  const res = await shopifyFetch<any>({ query, cache: 'no-store' })
+  return res.body?.data?.cartCreate?.cart
+}
+
+export async function addToCart(
+  cartId: string,
+  lines: { merchandiseId: string; quantity: number }[],
+) {
+  const query = `
+    mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+      cartLinesAdd(cartId: $cartId, lines: $lines) {
+        cart {
+          id
+          checkoutUrl
+          totalQuantity
+        }
+      }
+    }
+  `
+  const res = await shopifyFetch<any>({
+    query,
+    variables: { cartId, lines },
+    cache: 'no-store',
+  })
+  return res.body?.data?.cartLinesAdd?.cart
+}
+
+export async function getCart(cartId: string) {
+  const query = `
+    query getCart($cartId: ID!) {
+      cart(id: $cartId) {
+        id
+        checkoutUrl
+        totalQuantity
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+        }
+        lines(first: 100) {
+          edges {
+            node {
+              id
+              quantity
+              cost {
+                totalAmount {
+                  amount
+                  currencyCode
+                }
+              }
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  product {
+                    title
+                    handle
+                    images(first: 1) {
+                      edges {
+                        node {
+                          url
+                          altText
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `
+  const res = await shopifyFetch<any>({
+    query,
+    variables: { cartId },
+    cache: 'no-store',
+  })
+  return res.body?.data?.cart || null
 }

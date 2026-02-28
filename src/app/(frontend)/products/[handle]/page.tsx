@@ -3,6 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Header } from '../../components/Header'
 import { getProduct } from '@/lib/shopify'
+import { AddToCartButton } from '../../components/AddToCartButton'
 import '../../styles.css'
 
 export default async function ProductPage({ params }: { params: Promise<{ handle: string }> }) {
@@ -18,6 +19,7 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
 
   const price = product?.priceRange?.minVariantPrice
   const image = product?.images?.edges?.[0]?.node
+  const variantId = product?.variants?.edges?.[0]?.node?.id
 
   return (
     <div className="post-container">
@@ -106,18 +108,8 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                   // }}
                 />
 
-                <div
-                  className="btn btn-primary"
-                  style={{
-                    marginTop: '2rem',
-                    width: '100%',
-                    maxWidth: '300px',
-                    cursor: 'pointer',
-                    textAlign: 'center',
-                  }}
-                >
-                  Add to Cart
-                </div>
+                <AddToCartButton variantId={variantId} />
+
                 <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.6 }}>
                   Store checkout depends on active Shopify Cart API integration.
                 </p>

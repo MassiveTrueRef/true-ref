@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
+import { CartBadge } from './CartBadge'
 
 export async function Header() {
   const payload = await getPayload({ config: configPromise })
@@ -39,6 +40,9 @@ export async function Header() {
           <a href="/admin" target="_blank" rel="noopener noreferrer">
             Admin
           </a>
+          <Suspense fallback={<div style={{ width: 24, height: 24 }} />}>
+            <CartBadge />
+          </Suspense>
         </div>
       </div>
     </nav>
