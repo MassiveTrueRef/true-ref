@@ -6,6 +6,7 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import Link from 'next/link'
 import { Header } from '../components/Header'
 import '../styles.css'
+export const dynamic = 'force-dynamic'
 
 // export async function generateStaticParams() {
 //   const payload = await getPayload({ config: configPromise })
