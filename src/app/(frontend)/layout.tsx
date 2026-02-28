@@ -1,6 +1,8 @@
 import React from 'react'
 import './styles.css'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   description: 'Create beautiful, interactive reference guides and documentation',
   title: 'TrueRef - Reference Guides Made Simple',
