@@ -7,16 +7,16 @@ import Link from 'next/link'
 import { Header } from '../../components/Header'
 import '../../styles.css'
 
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
-    draft: false,
-    limit: 1000,
-  })
+// export async function generateStaticParams() {
+//   const payload = await getPayload({ config: configPromise })
+//   const posts = await payload.find({
+//     collection: 'posts',
+//     draft: false,
+//     limit: 1000,
+//   })
 
-  return posts.docs?.map(({ slug }) => ({ slug })) || []
-}
+//   return posts.docs?.map(({ slug }) => ({ slug })) || []
+// }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

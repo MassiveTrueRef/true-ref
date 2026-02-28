@@ -57,7 +57,7 @@ export default buildConfig({
   collections: [Users, Media, Pages, Posts, Categories],
   globals: [Navigation],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || 'fallback-secret-do-not-use-in-production',
+  secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
