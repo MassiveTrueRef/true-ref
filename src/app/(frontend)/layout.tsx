@@ -2,8 +2,8 @@ import React from 'react'
 import './styles.css'
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  description: 'Create beautiful, interactive reference guides and documentation',
+  title: 'TrueRef - Reference Guides Made Simple',
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
@@ -11,6 +11,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body>
         <main>{children}</main>
       </body>

@@ -1,11 +1,9 @@
 import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
 import { getPayload } from 'payload'
 import React from 'react'
-import { fileURLToPath } from 'url'
+import './styles.css'
 
 import config from '@/payload.config'
-import './styles.css'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -13,46 +11,72 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
-
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
+    <div className="hero">
+      <nav className="navbar">
+        <div className="navbar-content">
+          <div className="logo">TrueRef</div>
+          <div className="nav-links">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href={payloadConfig.routes.admin} target="_blank" rel="noopener noreferrer">
+              Admin
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <div className="hero-content">
+        <div className="hero-main">
+          <h1>Real references for real artists</h1>
+          <p className="subtitle">
+            TrueRef is here to serve up monthly figure references for illustrators and photo
+            editors—always free from retouching and never AI-generated.
+          </p>
+          <div className="cta-buttons">
+            <a
+              href={payloadConfig.routes.admin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+            >
+              Explore References
+            </a>
+            <a href="#features" className="btn btn-secondary">
+              Learn More
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="features-section" id="features">
+        <h2>Why TrueRef</h2>
+        <div className="features-grid">
+          <div className="feature-card">
+            <h3>Authentic</h3>
+            <p>
+              Real photographs with zero retouching. What you see is what you get—genuine,
+              unpolished reference material.
+            </p>
+          </div>
+          <div className="feature-card">
+            <h3>Human-Created</h3>
+            <p>
+              Every reference pack is photographed with real people. Never AI-generated, always
+              authentic human poses and expressions.
+            </p>
+          </div>
+          <div className="feature-card">
+            <h3>Regular Updates</h3>
+            <p>
+              New reference packs added every month. Stay inspired with fresh content for
+              illustrators, concept artists, and photo editors.
+            </p>
+          </div>
         </div>
       </div>
       <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
+        <p>&copy; 2026 TrueRef. All rights reserved.</p>
       </div>
     </div>
   )
