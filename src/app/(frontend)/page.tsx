@@ -21,7 +21,7 @@ export default async function HomePage() {
           <h1>Real references for real artists</h1>
           <p className="subtitle">
             TrueRef is here to serve up monthly figure references for illustrators and photo
-            editors—always free from retouching and never AI-generated.
+            editors—always free from retouching and never AI-generated..
           </p>
           <div className="cta-buttons">
             <Link href="/products" className="btn btn-primary">
