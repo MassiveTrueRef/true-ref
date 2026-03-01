@@ -1,5 +1,13 @@
+import { cookies } from 'next/headers'
+
 const domain = process.env.SHOPIFY_STORE_DOMAIN || ''
 const storefrontAccessToken = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN || ''
+
+async function getContextDirective() {
+  const cookieStore = await cookies()
+  const country = cookieStore.get('shop_country')?.value || 'US'
+  return `@inContext(country: ${country})`
+}
 
 export async function shopifyFetch<T>({
   cache = 'force-cache',
@@ -51,9 +59,10 @@ export async function shopifyFetch<T>({
 
 export async function getProducts(limit = 20) {
   if (!domain || !storefrontAccessToken) return []
+  const context = await getContextDirective()
 
   const query = `
-    query getProducts($first: Int!) {
+    query getProducts($first: Int!) ${context} {
       products(first: $first) {
         edges {
           node {
@@ -93,9 +102,10 @@ export async function getProducts(limit = 20) {
 
 export async function getProduct(handle: string) {
   if (!domain || !storefrontAccessToken) return null
+  const context = await getContextDirective()
 
   const query = `
-    query getProduct($handle: String!) {
+    query getProduct($handle: String!) ${context} {
       product(handle: $handle) {
         id
         title
@@ -138,8 +148,9 @@ export async function getProduct(handle: string) {
 }
 
 export async function createCart() {
+  const context = await getContextDirective()
   const query = `
-    mutation cartCreate {
+    mutation cartCreate ${context} {
       cartCreate {
         cart {
           id
@@ -156,8 +167,9 @@ export async function addToCart(
   cartId: string,
   lines: { merchandiseId: string; quantity: number }[],
 ) {
+  const context = await getContextDirective()
   const query = `
-    mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+    mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) ${context} {
       cartLinesAdd(cartId: $cartId, lines: $lines) {
         cart {
           id
@@ -176,8 +188,9 @@ export async function addToCart(
 }
 
 export async function updateCartItem(cartId: string, lines: { id: string; quantity: number }[]) {
+  const context = await getContextDirective()
   const query = `
-    mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+    mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) ${context} {
       cartLinesUpdate(cartId: $cartId, lines: $lines) {
         cart {
           id
@@ -195,8 +208,9 @@ export async function updateCartItem(cartId: string, lines: { id: string; quanti
 }
 
 export async function removeCartItem(cartId: string, lineIds: string[]) {
+  const context = await getContextDirective()
   const query = `
-    mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) ${context} {
       cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
         cart {
           id
@@ -214,8 +228,9 @@ export async function removeCartItem(cartId: string, lineIds: string[]) {
 }
 
 export async function getCart(cartId: string) {
+  const context = await getContextDirective()
   const query = `
-    query getCart($cartId: ID!) {
+    query getCart($cartId: ID!) ${context} {
       cart(id: $cartId) {
         id
         checkoutUrl

@@ -3,12 +3,17 @@ import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 import { CartBadge } from './CartBadge'
+import { CurrencySwitcher } from './CurrencySwitcher'
+import { cookies } from 'next/headers'
 
 export async function Header() {
   const payload = await getPayload({ config: configPromise })
   const nav = await payload.findGlobal({
     slug: 'navigation',
   })
+
+  const cookieStore = await cookies()
+  const country = cookieStore.get('shop_country')?.value || 'US'
 
   return (
     <nav className="navbar">
@@ -43,6 +48,7 @@ export async function Header() {
           <Suspense fallback={<div style={{ width: 24, height: 24 }} />}>
             <CartBadge />
           </Suspense>
+          <CurrencySwitcher currentCountry={country} />
         </div>
       </div>
     </nav>
