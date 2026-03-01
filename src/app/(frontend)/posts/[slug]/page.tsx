@@ -5,6 +5,7 @@ import configPromise from '@/payload.config'
 import { RichText } from '@payloadcms/richtext-lexical/react'
 import Link from 'next/link'
 import { Header } from '../../components/Header'
+import { CommentsSection } from '../../components/CommentsSection'
 import '../../styles.css'
 
 // export async function generateStaticParams() {
@@ -88,6 +89,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
 
           <div className="rich-text">{post.content && <RichText data={post.content} />}</div>
+          <CommentsSection referenceType="posts" referenceId={post.id} path={`/posts/${slug}`} />
         </div>
       </div>
     </div>
