@@ -1,7 +1,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import { createCart, addToCart, getCart } from '@/lib/shopify'
+import { createCart, addToCart, getCart, updateCartItem, removeCartItem } from '@/lib/shopify'
 import { revalidatePath } from 'next/cache'
 
 export async function addItemToCart(variantId: string) {
@@ -27,6 +27,31 @@ export async function addItemToCart(variantId: string) {
   await addToCart(cartId!, [{ merchandiseId: variantId, quantity: 1 }])
 
   // Revalidate everything since the header's cart badge shows up everywhere
+  revalidatePath('/', 'layout')
+}
+
+export async function updateItemQuantity(lineId: string, quantity: number) {
+  const cookieStore = await cookies()
+  const cartId = cookieStore.get('cartId')?.value
+
+  if (!cartId) return
+
+  if (quantity <= 0) {
+    await removeCartItem(cartId, [lineId])
+  } else {
+    await updateCartItem(cartId, [{ id: lineId, quantity }])
+  }
+
+  revalidatePath('/', 'layout')
+}
+
+export async function removeItem(lineId: string) {
+  const cookieStore = await cookies()
+  const cartId = cookieStore.get('cartId')?.value
+
+  if (!cartId) return
+
+  await removeCartItem(cartId, [lineId])
   revalidatePath('/', 'layout')
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { fetchCart } from './actions'
 import { Header } from '../components/Header'
+import { CartItemControls } from '../components/CartItemControls'
 import '../styles.css'
 
 export default async function CartPage() {
@@ -58,7 +59,7 @@ export default async function CartPage() {
                       )}
                       <div style={{ flex: 1 }}>
                         <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{product.title}</h3>
-                        <p style={{ margin: '0.25rem 0', color: '#666' }}>Qty: {line.quantity}</p>
+                        <CartItemControls lineId={line.id} quantity={line.quantity} />
                       </div>
                       <div style={{ fontWeight: 'bold' }}>
                         {new Intl.NumberFormat('en-US', {

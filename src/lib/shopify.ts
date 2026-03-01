@@ -175,6 +175,44 @@ export async function addToCart(
   return res.body?.data?.cartLinesAdd?.cart
 }
 
+export async function updateCartItem(cartId: string, lines: { id: string; quantity: number }[]) {
+  const query = `
+    mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+      cartLinesUpdate(cartId: $cartId, lines: $lines) {
+        cart {
+          id
+          totalQuantity
+        }
+      }
+    }
+  `
+  const res = await shopifyFetch<any>({
+    query,
+    variables: { cartId, lines },
+    cache: 'no-store',
+  })
+  return res.body?.data?.cartLinesUpdate?.cart
+}
+
+export async function removeCartItem(cartId: string, lineIds: string[]) {
+  const query = `
+    mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+      cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+        cart {
+          id
+          totalQuantity
+        }
+      }
+    }
+  `
+  const res = await shopifyFetch<any>({
+    query,
+    variables: { cartId, lineIds },
+    cache: 'no-store',
+  })
+  return res.body?.data?.cartLinesRemove?.cart
+}
+
 export async function getCart(cartId: string) {
   const query = `
     query getCart($cartId: ID!) {

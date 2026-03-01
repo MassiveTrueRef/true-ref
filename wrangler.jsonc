@@ -30,10 +30,15 @@
     //   "service": "my-app"
     // },
   ],
+  "vars": {
+    "SHOPIFY_STORE_DOMAIN": "massiverefdev.myshopify.com",
+    "SHOPIFY_STOREFRONT_ACCESS_TOKEN": "f72ca26781b38a64359de472be4b7749",
+  },
   "r2_buckets": [
     {
       "binding": "R2",
-      "bucket_name": "true-ref-main","preview_bucket_name": "true-ref-main",
+      "bucket_name": "true-ref-main",
+      "preview_bucket_name": "true-ref-main",
     },
     // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
     // {
