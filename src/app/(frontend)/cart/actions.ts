@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import { createCart, addToCart, getCart, updateCartItem, removeCartItem } from '@/lib/shopify'
 import { revalidatePath } from 'next/cache'
 
-export async function addItemToCart(variantId: string) {
+export async function addItemToCart(variantId: string, sellingPlanId?: string) {
   if (!variantId) {
     throw new Error('Missing variantId')
   }
@@ -24,7 +24,12 @@ export async function addItemToCart(variantId: string) {
     })
   }
 
-  await addToCart(cartId!, [{ merchandiseId: variantId, quantity: 1 }])
+  const lineItem: any = { merchandiseId: variantId, quantity: 1 }
+  if (sellingPlanId) {
+    lineItem.sellingPlanId = sellingPlanId
+  }
+
+  await addToCart(cartId!, [lineItem])
 
   // Revalidate everything since the header's cart badge shows up everywhere
   revalidatePath('/', 'layout')

@@ -18,6 +18,24 @@ export async function createComment(formData: FormData) {
 
   const payload = await getPayload({ config: configPromise })
 
+  let productId = null
+  if (referenceType === 'products' && productHandle) {
+    const existingDocs = await payload.find({
+      collection: 'products',
+      where: { handle: { equals: productHandle } },
+      limit: 1,
+    })
+    if (existingDocs.docs.length > 0) {
+      productId = existingDocs.docs[0].id
+    } else {
+      const newProduct = await payload.create({
+        collection: 'products',
+        data: { handle: productHandle },
+      })
+      productId = newProduct.id
+    }
+  }
+
   await payload.create({
     collection: 'comments',
     data: {
@@ -25,7 +43,7 @@ export async function createComment(formData: FormData) {
       content,
       referenceType,
       ...(referenceType === 'posts' && postId ? { post: postId } : {}),
-      ...(referenceType === 'products' && productHandle ? { product: productHandle } : {}),
+      ...(referenceType === 'products' && productId ? { product: productId } : {}),
     },
   })
 

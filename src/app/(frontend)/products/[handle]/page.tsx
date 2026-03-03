@@ -3,7 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Header } from '../../components/Header'
 import { getProduct } from '@/lib/shopify'
-import { AddToCartButton } from '../../components/AddToCartButton'
+import { ProductPurchaseForm } from '../../components/ProductPurchaseForm'
 import { CommentsSection } from '../../components/CommentsSection'
 import '../../styles.css'
 
@@ -109,7 +109,10 @@ export default async function ProductPage({ params }: { params: Promise<{ handle
                   // }}
                 />
 
-                <AddToCartButton variantId={variantId} />
+                <ProductPurchaseForm
+                  variantId={variantId}
+                  sellingPlanGroups={product?.sellingPlanGroups?.edges}
+                />
 
                 <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.6 }}>
                   Store checkout depends on active Shopify Cart API integration.

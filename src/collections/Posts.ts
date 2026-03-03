@@ -83,5 +83,11 @@ export const Posts: CollectionConfig = {
         },
       },
     },
+    {
+      name: 'comments',
+      type: 'join',
+      collection: 'comments',
+      on: 'post',
+    },
   ],
 }

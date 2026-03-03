@@ -38,16 +38,16 @@ export const Comments: CollectionConfig = {
       type: 'relationship',
       relationTo: 'posts',
       admin: {
-        condition: (_, siblingData) => siblingData.referenceType === 'posts',
+        condition: (_, siblingData) => siblingData?.referenceType === 'posts',
         position: 'sidebar',
       },
     },
     {
       name: 'product',
-      label: 'Product ID or Handle',
-      type: 'text',
+      type: 'relationship',
+      relationTo: 'products',
       admin: {
-        condition: (_, siblingData) => siblingData.referenceType === 'products',
+        condition: (_, siblingData) => siblingData?.referenceType === 'products',
         position: 'sidebar',
       },
     },

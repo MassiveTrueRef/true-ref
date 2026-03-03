@@ -135,6 +135,45 @@ export async function getProduct(handle: string) {
             }
           }
         }
+        sellingPlanGroups(first: 10) {
+          edges {
+            node {
+              name
+              options {
+                name
+                values
+              }
+              sellingPlans(first: 10) {
+                edges {
+                  node {
+                    id
+                    name
+                    description
+                    priceAdjustments {
+                      adjustmentValue {
+                        ... on SellingPlanFixedAmountPriceAdjustment {
+                          adjustmentAmount {
+                            amount
+                            currencyCode
+                          }
+                        }
+                        ... on SellingPlanFixedPriceAdjustment {
+                          price {
+                            amount
+                            currencyCode
+                          }
+                        }
+                        ... on SellingPlanPercentagePriceAdjustment {
+                          adjustmentPercentage
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   `
@@ -165,7 +204,7 @@ export async function createCart() {
 
 export async function addToCart(
   cartId: string,
-  lines: { merchandiseId: string; quantity: number }[],
+  lines: { merchandiseId: string; quantity: number; sellingPlanId?: string }[],
 ) {
   const context = await getContextDirective()
   const query = `
@@ -252,6 +291,12 @@ export async function getCart(cartId: string) {
                   currencyCode
                 }
               }
+              sellingPlanAllocation {
+                sellingPlan {
+                  name
+                  description
+                }
+              }
               merchandise {
                 ... on ProductVariant {
                   id
@@ -282,4 +327,86 @@ export async function getCart(cartId: string) {
     cache: 'no-store',
   })
   return res.body?.data?.cart || null
+}
+
+export async function createCustomerAccessToken(email: string, password: string) {
+  const query = `
+    mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+      customerAccessTokenCreate(input: $input) {
+        customerAccessToken {
+          accessToken
+          expiresAt
+        }
+        customerUserErrors {
+          code
+          field
+          message
+        }
+      }
+    }
+  `
+
+  const variables = {
+    input: {
+      email,
+      password,
+    },
+  }
+
+  const res = await shopifyFetch<any>({
+    query,
+    variables,
+    cache: 'no-store',
+  })
+
+  return res.body?.data?.customerAccessTokenCreate?.customerAccessToken?.accessToken || null
+}
+
+export async function getCustomer(accessToken: string) {
+  const query = `
+    query customer($customerAccessToken: String!) {
+      customer(customerAccessToken: $customerAccessToken) {
+        id
+        firstName
+        lastName
+        email
+        phone
+        tags
+        orders(first: 10, sortKey: PROCESSED_AT, reverse: true) {
+          edges {
+            node {
+              id
+              orderNumber
+              processedAt
+              totalPrice {
+                amount
+                currencyCode
+              }
+              financialStatus
+              fulfillmentStatus
+              lineItems(first: 10) {
+                edges {
+                  node {
+                    title
+                    quantity
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `
+
+  try {
+    const res = await shopifyFetch<any>({
+      query,
+      variables: { customerAccessToken: accessToken },
+      cache: 'no-store',
+    })
+    return res.body?.data?.customer || null
+  } catch (err) {
+    return null
+  }
 }

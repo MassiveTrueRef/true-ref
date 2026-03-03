@@ -59,6 +59,18 @@ export default async function CartPage() {
                       )}
                       <div style={{ flex: 1 }}>
                         <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{product.title}</h3>
+                        {line.sellingPlanAllocation && (
+                          <div
+                            style={{
+                              fontSize: '0.85rem',
+                              color: '#666',
+                              marginBottom: '0.5rem',
+                              marginTop: '0.25rem',
+                            }}
+                          >
+                            Subscription: {line.sellingPlanAllocation.sellingPlan.name}
+                          </div>
+                        )}
                         <CartItemControls lineId={line.id} quantity={line.quantity} />
                       </div>
                       <div style={{ fontWeight: 'bold' }}>

@@ -73,12 +73,20 @@ export interface Config {
     posts: Post;
     categories: Category;
     comments: Comment;
+    products: Product;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    posts: {
+      comments: 'comments';
+    };
+    products: {
+      comments: 'comments';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -86,6 +94,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -221,6 +230,11 @@ export interface Post {
   } | null;
   categories?: (number | Category)[] | null;
   publishedAt?: string | null;
+  comments?: {
+    docs?: (number | Comment)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -245,7 +259,24 @@ export interface Comment {
   content: string;
   referenceType: 'posts' | 'products';
   post?: (number | null) | Post;
-  product?: string | null;
+  product?: (number | null) | Product;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Proxy collection for Shopify products to attach comments.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  handle: string;
+  comments?: {
+    docs?: (number | Comment)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -296,6 +327,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'comments';
         value: number | Comment;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -400,6 +435,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   categories?: T;
   publishedAt?: T;
+  comments?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -423,6 +459,16 @@ export interface CommentsSelect<T extends boolean = true> {
   referenceType?: T;
   post?: T;
   product?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  handle?: T;
+  comments?: T;
   updatedAt?: T;
   createdAt?: T;
 }

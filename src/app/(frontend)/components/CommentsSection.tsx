@@ -12,16 +12,31 @@ type CommentsSectionProps = {
 export async function CommentsSection({ referenceType, referenceId, path }: CommentsSectionProps) {
   const payload = await getPayload({ config: configPromise })
 
+  let existingProductId = null
+  if (referenceType === 'products') {
+    const pFind = await payload.find({
+      collection: 'products',
+      where: { handle: { equals: referenceId as string } },
+      limit: 1,
+    })
+    if (pFind.docs.length > 0) {
+      existingProductId = pFind.docs[0].id
+    }
+  }
+
   const whereConstraint =
     referenceType === 'posts'
       ? { post: { equals: referenceId }, referenceType: { equals: 'posts' } }
-      : { product: { equals: referenceId as string }, referenceType: { equals: 'products' } }
+      : { product: { equals: existingProductId }, referenceType: { equals: 'products' } }
 
-  const commentsRes = await payload.find({
-    collection: 'comments',
-    where: whereConstraint,
-    sort: '-createdAt',
-  })
+  let commentsRes = { docs: [] as any[] }
+  if (referenceType === 'posts' || existingProductId) {
+    commentsRes = await payload.find({
+      collection: 'comments',
+      where: whereConstraint,
+      sort: '-createdAt',
+    })
+  }
 
   return (
     <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid #eee' }}>
