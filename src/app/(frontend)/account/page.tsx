@@ -1,28 +1,13 @@
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { getCustomer } from '@/lib/shopify'
+import { verifyMembership } from '@/lib/membership'
 import { logout } from '@/app/(frontend)/login/actions'
+import { redirect } from 'next/navigation'
 
 export default async function AccountPage() {
-  const cookieStore = await cookies()
-  const token = cookieStore.get('customerAccessToken')?.value
+  const { isMember, customer, isAuthenticated } = await verifyMembership()
 
-  if (!token) {
+  if (!isAuthenticated || !customer) {
     redirect('/login')
   }
-
-  const customer = await getCustomer(token)
-
-  if (!customer) {
-    // Token might be invalid or expired
-    redirect('/login')
-  }
-
-  // Check if they have a 'Member' or similar tag indicating an active membership
-  const isMember = customer.tags?.some(
-    (tag: string) =>
-      tag.toLowerCase().includes('member') || tag.toLowerCase().includes('subscriber'),
-  )
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6">
