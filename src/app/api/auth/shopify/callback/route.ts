@@ -1,69 +1,61 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
+const SHOP_ID = '75113169051'
 const SHOPIFY_CLIENT_ID = process.env.SHOPIFY_CLIENT_ID || ''
-const SHOPIFY_CLIENT_SECRET = process.env.SHOPIFY_CLIENT_SECRET || ''
-const SHOP_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN || ''
-
-function getAppUrl(request: Request) {
-  const host = request.headers.get('host') || 'localhost:3000'
-  const protocol = host.includes('localhost') ? 'http' : 'https'
-  return `${protocol}://${host}`
-}
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
   const state = url.searchParams.get('state')
   const error = url.searchParams.get('error')
-  const errorDescription = url.searchParams.get('error_description')
 
-  // Handle User cancellation / Authorization errors
-  if (error) {
-    console.error('Shopify OAuth Error:', error, errorDescription)
-    return NextResponse.redirect(new URL(`/login?error=${error}`, request.url))
+  // Handle Shopify OIDC Cancellation or Errors
+  if (error || !code) {
+    console.error('Shopify OIDC Error:', error)
+    return NextResponse.redirect(new URL('/login?error=auth_failed', request.url))
   }
 
-  // Verify State to protect against CSRF attacks
+  // Verify State Cookie
   const cookieStore = await cookies()
   const savedState = cookieStore.get('shopifyOauthState')?.value
+  const codeVerifier = cookieStore.get('shopifyCodeVerifier')?.value
 
   if (!state || state !== savedState) {
     return NextResponse.redirect(new URL('/login?error=invalid_state', request.url))
   }
 
-  if (!code) {
-    return NextResponse.redirect(new URL('/login?error=missing_code', request.url))
+  if (!codeVerifier) {
+    return NextResponse.redirect(new URL('/login?error=missing_verifier', request.url))
   }
 
-  const redirectUri = `${getAppUrl(request)}/api/auth/shopify/callback`
+  const redirectUri = `https://bracingly-bosomed-lennox.ngrok-free.dev/api/auth/shopify/callback`
 
   try {
-    // Exchange the Authorization Code for an Access Token
-    // Required standard payload for Shopify OAuth Token Exchange
-    const tokenResponse = await fetch(`https://${SHOP_DOMAIN}/admin/oauth/access_token`, {
+    // Standard PKCE Token Exchange for Public Clients
+    const tokenResponse = await fetch(`https://shopify.com/authentication/${SHOP_ID}/oauth/token`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify({
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
         client_id: SHOPIFY_CLIENT_ID,
-        client_secret: SHOPIFY_CLIENT_SECRET,
+        redirect_uri: redirectUri,
         code,
+        code_verifier: codeVerifier, // Instead of Client Secret!
       }),
     })
 
-    const tokenData = await tokenResponse.json()
+    const tokenData: any = await tokenResponse.json()
 
     if (!tokenResponse.ok) {
-      console.error('Token Exchange Failed:', tokenData)
+      console.error('Customer Account API Token Exchange Failed:', tokenData)
       throw new Error(tokenData.error_description || 'Failed to exchange token')
     }
 
-    // Success! We have the token
+    // Success! We have the standard Customer Account API OIDC token
     const accessToken = tokenData.access_token
-    const expiresIn = tokenData.expires_in || 7200 // Default 2 hours
-    const idToken = tokenData.id_token // Contains user identity details if OIDC requested
 
     // Store the customer's secure token
     cookieStore.set('customerAccessToken', accessToken, {
@@ -71,16 +63,19 @@ export async function GET(request: Request) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: expiresIn,
+      maxAge: tokenData.expires_in || 7200,
     })
 
-    // Clean up state cookie
+    // Clean up
     cookieStore.delete('shopifyOauthState')
+    cookieStore.delete('shopifyCodeVerifier')
 
-    // Redirect to the account hub natively
-    return NextResponse.redirect(new URL('/account', request.url))
+    // Take them natively back into their custom account portal
+    return NextResponse.redirect(
+      new URL('https://bracingly-bosomed-lennox.ngrok-free.dev/account', request.url),
+    )
   } catch (err) {
-    console.error('OAuth Callback exception:', err)
+    console.error('OIDC Callback exception:', err)
     return NextResponse.redirect(new URL('/login?error=auth_failed', request.url))
   }
 }

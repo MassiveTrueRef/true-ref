@@ -1,30 +1,29 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import crypto from 'crypto'
 
-// Shopify OAuth constants
+// We fetched your actual Store ID dynamically for the Customer Accounts API
+const SHOP_ID = '75113169051'
 const SHOPIFY_CLIENT_ID = process.env.SHOPIFY_CLIENT_ID || ''
-const SHOP_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN || ''
-// Base URL for the app (needed for redirect URI)
-// In production, this should be your actual domain
-// In development, handle standard localhost or ngrok
-function getAppUrl(request: Request) {
-  const host = request.headers.get('host') || 'localhost:3000'
-  const protocol = host.includes('localhost') ? 'http' : 'https'
-  return `${protocol}://${host}`
+
+function base64URLEncode(str: Buffer) {
+  return str.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
 }
 
 export async function GET(request: Request) {
-  const appUrl = getAppUrl(request)
-  const redirectUri = `${appUrl}/api/auth/shopify/callback`
+  const redirectUri = `https://bracingly-bosomed-lennox.ngrok-free.dev/api/auth/shopify/callback`
 
-  // Scopes needed for our application
-  // To read customer tags/data using Storefront/Admin API
-  const scopes = 'unauthenticated_read_customers,unauthenticated_write_customers'
+  // Standard OpenID Connect scopes required by the New Customer Account API
+  const scopes = 'openid email customer-account-api:full'
 
-  // Generate a random state for security
+  // Generate random state and nonce for OIDC security
   const state = Math.random().toString(36).substring(2, 15)
+  const nonce = Math.random().toString(36).substring(2, 15)
 
-  // Save state in a secure httpOnly cookie to verify it in the callback
+  // Generate PKCE code verifier and challenge (No Client Secret Needed!)
+  const codeVerifier = base64URLEncode(crypto.randomBytes(32))
+  const codeChallenge = base64URLEncode(crypto.createHash('sha256').update(codeVerifier).digest())
+
   const cookieStore = await cookies()
   cookieStore.set('shopifyOauthState', state, {
     httpOnly: true,
@@ -33,17 +32,25 @@ export async function GET(request: Request) {
     path: '/',
   })
 
-  // IMPORTANT: For true headless (Multipass or Customer Account API OAuth),
-  // this flow typically uses the Shopify Customer Account API.
-  // Standard Storefront apps use Multipass (Shopify Plus) or Storefront tokens.
+  // Store the code_verifier so the callback can use it to exchange the token
+  cookieStore.set('shopifyCodeVerifier', codeVerifier, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 10,
+    path: '/',
+  })
 
-  // Generate the Shopify Token Exchange authorization URL
-  // https://shopify.dev/docs/apps/build/authentication-authorization/access-tokens/token-exchange
-  const authUrl = new URL(`https://${SHOP_DOMAIN}/admin/oauth/authorize`)
+  // IMPORTANT: The New Customer Account API uses shopify.com/authentication/{shop_id}
+  const authUrl = new URL(`https://shopify.com/authentication/${SHOP_ID}/oauth/authorize`)
+
   authUrl.searchParams.append('client_id', SHOPIFY_CLIENT_ID)
+  authUrl.searchParams.append('response_type', 'code')
   authUrl.searchParams.append('redirect_uri', redirectUri)
   authUrl.searchParams.append('scope', scopes)
   authUrl.searchParams.append('state', state)
+  authUrl.searchParams.append('nonce', nonce)
+  authUrl.searchParams.append('code_challenge', codeChallenge)
+  authUrl.searchParams.append('code_challenge_method', 'S256')
 
   return NextResponse.redirect(authUrl.toString())
 }

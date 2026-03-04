@@ -11,6 +11,8 @@ export async function verifyMembership() {
 
   if (!customer) return { isMember: false, customer: null, isAuthenticated: false }
 
+  console.log(customer)
+
   const isMember = customer.tags?.some(
     (tag: string) =>
       tag.toLowerCase().includes('member') || tag.toLowerCase().includes('subscriber'),

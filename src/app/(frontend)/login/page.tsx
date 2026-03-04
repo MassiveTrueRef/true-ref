@@ -43,7 +43,7 @@ export default function LoginPage() {
       <div className="mt-6 flex items-center justify-between">
         <span className="w-1/5 border-b lg:w-1/4"></span>
         <a href="#" className="text-xs text-center text-gray-500 uppercase">
-          or login with
+          or login seamlessly
         </a>
         <span className="w-1/5 border-b lg:w-1/4"></span>
       </div>
