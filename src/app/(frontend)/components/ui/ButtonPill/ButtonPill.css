@@ -1,0 +1,126 @@
+.btn {
+  /* ktodo final inline padding */
+  --padding-inline: var(--space-xl);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 10px var(--padding-inline);
+  /* ktodo final border size */
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--padding-inline);
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    width: 150%;
+    height: 200%;
+    inset-block-start: -50%;
+    inset-inline-start: -25%;
+    border-radius: 50%;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  span {
+    position: relative;
+    transition: color 0.2s linear;
+  }
+
+  /* DISABLED */
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* LOADING */
+  .spinner {
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* VARIANTS */
+.btn--primary {
+  background-color: #000000;
+  border-color: var(--color-brand-red-primary);
+
+  &::before {
+    background-color: var(--color-brand-red-primary);
+  }
+
+  span {
+    color: #ffffff;
+  }
+
+  &:hover {
+    span {
+      color: #000000;
+    }
+  }
+}
+
+.btn--secondary {
+  color: var(--color-brand-red-primary);
+  background-color: #000000;
+  border-color: #ffffff;
+
+  &::before {
+    background-color: #ffffff;
+  }
+
+  span {
+    color: #ffffff;
+  }
+
+  &:hover {
+    span {
+      color: #000000;
+    }
+  }
+}
+
+/* ANIMATION */
+.btn:before {
+  --anim-hover-ease: cubic-bezier(0.3, 1, 0.3, 1);
+  transform: translateY(100%) scaleX(0);
+}
+.btn.hovered::before {
+  animation: enterUp 1.2s var(--anim-hover-ease) forwards;
+}
+.btn.hover-leave::before {
+  animation: leaveUp 1.6s var(--anim-hover-ease) forwards;
+}
+@keyframes enterUp {
+  from {
+    transform: translateY(100%) scaleX(0);
+  }
+  to {
+    transform: translateY(0%) scaleX(2);
+  }
+}
+@keyframes leaveUp {
+  from {
+    transform: translateY(0) scaleX(2);
+  }
+  to {
+    transform: translateY(-100%) scaleX(0.5);
+  }
+}

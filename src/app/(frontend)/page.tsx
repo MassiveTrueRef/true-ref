@@ -4,6 +4,7 @@ import Link from 'next/link'
 import './styles.css'
 import { Header } from './components/Header'
 import { getProducts } from '@/lib/shopify'
+import ButtonPill from './components/ui/ButtonPill'
 
 import config from '@/payload.config'
 
@@ -24,17 +25,18 @@ export default async function HomePage() {
             editors—always free from retouching and never AI-generated..
           </p>
           <div className="cta-buttons">
-            <Link href="/products" className="btn btn-primary">
+            <ButtonPill tag="link" href="/products">
               Shop Kits
-            </Link>
-            <a
+            </ButtonPill>
+            <ButtonPill
+              variant="secondary"
+              tag="a"
               href={payloadConfig.routes.admin}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-secondary"
             >
               Editor Access
-            </a>
+            </ButtonPill>
           </div>
         </div>
       </div>
