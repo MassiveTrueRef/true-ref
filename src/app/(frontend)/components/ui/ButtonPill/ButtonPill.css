@@ -124,3 +124,13 @@
     transform: translateY(-100%) scaleX(0.5);
   }
 }
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .btn.hovered::before,
+  .btn.hover-leave::before {
+    animation-duration: 0s;
+  }
+  .btn span {
+    transition: none;
+  }
+}
