@@ -1,9 +1,8 @@
 #!/bin/bash
 
-echo "Branch: $GITHUB_REF_NAME"
-env | sort
+echo "Branch: $WORKERS_CI_BRANCH"
 
-if [[ "$GITHUB_REF_NAME" == "main" || "$GITHUB_REF_NAME" == "qa" ]]; then
+if [[ "$WORKERS_CI_BRANCH" == "main" || "$WORKERS_CI_BRANCH" == "qa" ]]; then
   npm run build
 else
   echo "Branch not allowed for build. Skipping."
