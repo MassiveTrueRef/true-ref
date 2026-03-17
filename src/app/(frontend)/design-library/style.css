@@ -1,0 +1,12 @@
+body {
+  background-color: black;
+  color: #ffffff;
+  margin: 40px;
+}
+
+.batch {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin-block: 40px;
+}
