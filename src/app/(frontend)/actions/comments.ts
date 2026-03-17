@@ -45,7 +45,7 @@ export async function createComment(formData: FormData) {
   //     ...(referenceType === 'posts' && postId ? { post: postId } : {}),
   //     ...(referenceType === 'products' && productId ? { product: productId } : {}),
   //   },
-  // })
+  // }) //
 
   revalidatePath(path)
 }
