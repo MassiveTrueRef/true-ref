@@ -36,16 +36,16 @@ export async function createComment(formData: FormData) {
     }
   }
 
-  await payload.create({
-    collection: 'comments',
-    data: {
-      name,
-      content,
-      referenceType,
-      ...(referenceType === 'posts' && postId ? { post: postId } : {}),
-      ...(referenceType === 'products' && productId ? { product: productId } : {}),
-    },
-  })
+  // await payload.create({
+  //   collection: 'comments',
+  //   data: {
+  //     name,
+  //     content,
+  //     referenceType,
+  //     ...(referenceType === 'posts' && postId ? { post: postId } : {}),
+  //     ...(referenceType === 'products' && productId ? { product: productId } : {}),
+  //   },
+  // })
 
   revalidatePath(path)
 }
