@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "Branch: $CF_PAGES_BRANCH"
+echo "Branch: $GITHUB_REF_NAME"
 
-if [[ "$CF_PAGES_BRANCH" == "main" || "$CF_PAGES_BRANCH" == "qa" ]]; then
+if [[ "$GITHUB_REF_NAME" == "main" || "$GITHUB_REF_NAME" == "qa" ]]; then
   npm run build
 else
   echo "Branch not allowed for build. Skipping."
