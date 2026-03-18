@@ -61,17 +61,16 @@ function Button({
 
   if (tag === 'link' && href) {
     return (
-      <Link href={href} passHref legacyBehavior>
-        <a
-          className={classes}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          rel={rel}
-          target={target}
-        >
-          {loading && <span className="spinner"></span>}
-          <span>{children}</span>
-        </a>
+      <Link
+        href={href}
+        className={classes}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        rel={rel}
+        target={target}
+      >
+        {loading && <span className="spinner"></span>}
+        <span>{children}</span>
       </Link>
     )
   }
