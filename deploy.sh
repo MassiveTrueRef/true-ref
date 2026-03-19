@@ -3,7 +3,7 @@
 echo "Branch: $WORKERS_CI_BRANCH"
 
 if [[ "$WORKERS_CI_BRANCH" == "main" || "$WORKERS_CI_BRANCH" == "staging" ]]; then
-  npm run build
+  CLOUDFLARE_ENV=$WORKERS_CI_BRANCH npm run deploy
 else
-  echo "Branch not allowed for build. Skipping."
+  echo "Branch not allowed for deploy. Skipping."
 fi
