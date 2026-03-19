@@ -52,6 +52,7 @@
   "env": {
     "staging": {
       "name": "true-ref-staging",
+      "workers_dev": true,
       "d1_databases": [
         {
           "binding": "D1",
@@ -67,6 +68,10 @@
         //   "service": "true-ref-staging"
         // },
       ],
+      "vars": {
+        "SHOPIFY_STORE_DOMAIN": "massiverefdev.myshopify.com",
+        "SHOPIFY_STOREFRONT_ACCESS_TOKEN": "f72ca26781b38a64359de472be4b7749",
+      },
       "r2_buckets": [
         {
           "binding": "R2",
