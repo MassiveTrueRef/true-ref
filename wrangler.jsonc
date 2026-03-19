@@ -52,7 +52,7 @@
   "env": {
     "staging": {
       "name": "true-ref-staging",
-      "workers_dev": true,
+      "workers_dev": false,
       "d1_databases": [
         {
           "binding": "D1",
