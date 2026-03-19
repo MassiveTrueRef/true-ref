@@ -50,11 +50,35 @@
   // Here's how to configure an additional environment
   // It can be deployed with `CLOUDFLARE_ENV=staging pnpm run deploy`
   "env": {
-    "dev": {
-      "name": "true-ref-dev",
-    },
-    "qa": {
-      "name": "true-ref-qa",
+    "staging": {
+      "name": "true-ref-staging",
+      "d1_databases": [
+        {
+          "binding": "D1",
+          "database_id": "a5b9823d-157d-40ab-b72a-5ae0e95bb3a4",
+          "database_name": "true-ref-staging",
+          "remote": true,
+        },
+      ],
+      "services": [
+        // The service should match the "name" of your worker
+        // {
+        //   "binding": "WORKER_SELF_REFERENCE",
+        //   "service": "true-ref-staging"
+        // },
+      ],
+      "r2_buckets": [
+        {
+          "binding": "R2",
+          "bucket_name": "true-ref-staging",
+          "preview_bucket_name": "true-ref-staging",
+        },
+        // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
+        // {
+        //   "binding": "NEXT_INC_CACHE_R2_BUCKET",
+        //   "bucket_name": "<BUCKET_NAME>",
+        // },
+      ],
     },
   },
 }
