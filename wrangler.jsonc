@@ -53,6 +53,7 @@
     "staging": {
       "name": "true-ref-staging",
       "workers_dev": false,
+      "preview_urls": true,
       "d1_databases": [
         {
           "binding": "D1",
