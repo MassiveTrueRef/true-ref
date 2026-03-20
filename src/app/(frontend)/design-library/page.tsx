@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import Button from '../components/ui/ButtonPill'
 
 import './style.css'
+import ButtonSocial from '../components/ui/ButtonSocial'
 
 function DesignLibrary() {
   useEffect(() => {
@@ -18,8 +19,16 @@ function DesignLibrary() {
 
   return (
     <div>
-      <h1>Design Library</h1>
-      <h2>Buttons</h2>
+      <div className="library-nav">
+        <h1>Design Library</h1>
+        <a href="#buttons">Buttons</a>
+      </div>
+      <h2 id="buttons">Buttons</h2>
+      <h3>Social Button</h3>
+      <div className="batch">
+        <ButtonSocial platform="facebook"></ButtonSocial>
+        <ButtonSocial platform="instagram" size={40} color="red"></ButtonSocial>
+      </div>
       <h3>Pill Button</h3>
       <div className="batch">
         <Button>Primary Button</Button>

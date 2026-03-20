@@ -19,10 +19,11 @@
   --text-secondary: #666666;
   --border: #e5e7eb;
   --transition: all 0.3s ease;
-  
+
   --rounded-button: 3.75rem;
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Inter', sans-serif;
+  --font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Inter', sans-serif;
 }
 
 * {
@@ -44,7 +45,12 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   font-weight: 700;
   line-height: 1.2;
@@ -143,7 +149,11 @@ a:hover {
 
 .hero-main h1 {
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, rgb(var(--color-base-highlight)) 0%, rgb(var(--color-base-highlight) / 0.8) 100%);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-base-highlight)) 0%,
+    rgb(var(--color-base-highlight) / 0.8) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -163,7 +173,7 @@ a:hover {
   flex-wrap: wrap;
 }
 
-.btn {
+/* .btn {
   padding: 0.75rem 2rem;
   border-radius: var(--rounded-button);
   font-weight: 600;
@@ -194,7 +204,7 @@ a:hover {
 .btn-secondary:hover {
   background: rgba(23, 23, 23, 0.05);
   transform: translateY(-2px);
-}
+} */
 
 .features-section {
   background: var(--surface);

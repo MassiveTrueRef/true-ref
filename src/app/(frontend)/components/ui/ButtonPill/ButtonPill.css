@@ -1,4 +1,4 @@
-.btn {
+.btn.pill {
   /* ktodo final inline padding */
   --padding-inline: var(--space-xl);
   position: relative;
@@ -58,7 +58,7 @@
 }
 
 /* VARIANTS */
-.btn--primary {
+.btn-pill--primary {
   background-color: #000000;
   border-color: var(--color-brand-red-primary);
 
@@ -77,7 +77,7 @@
   }
 }
 
-.btn--secondary {
+.btn-pill--secondary {
   color: var(--color-brand-red-primary);
   background-color: #000000;
   border-color: #ffffff;
@@ -98,14 +98,14 @@
 }
 
 /* ANIMATION */
-.btn:before {
+.btn.pill:before {
   --anim-hover-ease: cubic-bezier(0.3, 1, 0.3, 1);
   transform: translateY(100%) scaleX(0);
 }
-.btn.hovered::before {
+.btn.pill.hovered::before {
   animation: enterUp 1.2s var(--anim-hover-ease) forwards;
 }
-.btn.hover-leave::before {
+.btn.pill.hover-leave::before {
   animation: leaveUp 1.6s var(--anim-hover-ease) forwards;
 }
 @keyframes enterUp {
@@ -126,11 +126,11 @@
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .btn.hovered::before,
-  .btn.hover-leave::before {
+  .btn.pill.hovered::before,
+  .btn.pill.hover-leave::before {
     animation-duration: 0s;
   }
-  .btn span {
+  .btn.pill span {
     transition: none;
   }
 }

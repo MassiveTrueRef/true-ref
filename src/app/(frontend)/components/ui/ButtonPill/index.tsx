@@ -33,8 +33,8 @@ function Button({
   const Component = tag
 
   const classes = [
-    `btn`,
-    `btn--${variant}`,
+    `btn pill`,
+    `btn-pill--${variant}`,
     loading ? 'btn--loading' : '',
     hoverState === 'hovered' ? 'hovered' : '',
     hoverState === 'leave' ? 'hover-leave' : '',
