@@ -11,14 +11,6 @@ type SocialListProps = {
   className?: string
 }
 
-const SOCIAL_LINKS = {
-  bluesky: '#',
-  discord: '#',
-  instagram: '#',
-  youtube: '#',
-  pinterest: '#',
-}
-
 // const followEase = cubicBezier(0, 0, 0.58, 1)
 
 function SocialList({
@@ -110,7 +102,7 @@ function SocialList({
               damping: 40,
             }}
           >
-            <ButtonSocial platform={platform} href={SOCIAL_LINKS[platform]} size={size} />
+            <ButtonSocial platform={platform} size={size} />
           </motion.li>
         )
       })}

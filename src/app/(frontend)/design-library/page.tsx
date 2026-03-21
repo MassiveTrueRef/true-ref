@@ -1,29 +1,38 @@
 'use client'
 
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import Button from '../components/ui/ButtonPill'
 
 import './style.css'
 import ButtonSocial from '../components/ui/ButtonSocial'
 import SocialList from '../components/layout/SocialList'
+import InputEmail from '../components/ui/InputEmail'
 
 function DesignLibrary() {
-  useEffect(() => {
-    // Add the 'loaded' class when the component mounts
-    document.body.classList.add('loaded')
+  // useEffect(() => {
+  //   // Add the 'loaded' class when the component mounts
+  //   document.body.classList.add('loaded')
 
-    // Optional: remove the class when the component unmounts
-    return () => {
-      document.body.classList.remove('loaded')
-    }
-  }, []) // Empty dependency array ensures it runs only once
+  //   // Optional: remove the class when the component unmounts
+  //   return () => {
+  //     document.body.classList.remove('loaded')
+  //   }
+  // }, []) // Empty dependency array ensures it runs only once
 
   return (
     <div>
       <div className="library-nav">
         <h1>Design Library</h1>
-        <a href="#buttons">Buttons</a>
+        <ul>
+          <li>
+            <a href="#buttons">Buttons</a>
+          </li>
+          <li>
+            <a href="#inputs">Inputs</a>
+          </li>
+        </ul>
       </div>
+      {/* BUTTONS ---------------- */}
       <h2 id="buttons">Buttons</h2>
       <h3>Social Button</h3>
       <div className="batch white-bg">
@@ -56,6 +65,12 @@ function DesignLibrary() {
         <Button variant="secondary" loading>
           Loading
         </Button>
+      </div>
+      {/* INPUTS ---------------- */}
+      <h2 id="inputs">Inputs</h2>
+      <h3>Email</h3>
+      <div className="batch">
+        <InputEmail></InputEmail>
       </div>
     </div>
   )

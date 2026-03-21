@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
 import './ButtonSocial.css'
+import { useRef, useState } from 'react'
 import IconDiscord from './IconDiscord'
 import IconInstagram from './IconInstagram'
 import IconPinterest from './IconPinterest'
@@ -12,22 +12,27 @@ const SOCIALS = {
   bluesky: {
     Icon: IconBsky,
     label: 'Bluesky',
+    url: 'https://bsky.app/profile/trueref.bsky.social',
   },
   discord: {
     Icon: IconDiscord,
     label: 'Discord',
+    url: 'https://discord.gg/r6eCnamBTy',
   },
   instagram: {
     Icon: IconInstagram,
     label: 'Instagram',
+    url: 'https://www.instagram.com/AbbeyMarieEsparza/',
   },
   pinterest: {
     Icon: IconPinterest,
     label: 'Pinterest',
+    url: 'https://www.pinterest.com/trueref/',
   },
   youtube: {
     Icon: IconYoutube,
     label: 'YouTube',
+    url: 'https://www.youtube.com/@TrueReference',
   },
 } as const
 
@@ -77,14 +82,14 @@ function ButtonSocial({ platform, href, size = 30, color = '#ffffff' }: SocialBu
   return (
     <Component
       className={classes}
-      href={href}
+      href={href ? href : SOCIALS[platform].url}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       rel="noopener noreferrer"
       target="_blank"
-      aria-label={`Visit TrueRef on ${label}`}
+      aria-label={`Visit TrueRef on ${label} (opens in a new tab)`}
     >
-      <span>
+      <span aria-hidden="true">
         <Icon size={size} color={color} />
       </span>
     </Component>

@@ -4,11 +4,31 @@ body {
   margin: 40px;
 }
 
+header {
+  display: none;
+}
+
 .library-nav {
   z-index: 9999;
   position: sticky;
   top: 0;
   background-color: black;
+}
+
+h2 {
+  background-color: #ffffff;
+  color: var(--primary);
+  border-radius: var(--space-md);
+  padding-block: var(--space-md);
+  padding-left: var(--space-md);
+}
+
+h3 {
+  margin-top: var(--space-md);
+}
+
+h3 + .batch {
+  margin-top: var(--space-sm);
 }
 
 .batch {
@@ -17,6 +37,8 @@ body {
   gap: 20px;
   margin-block: 40px;
   padding: var(--space-md);
+  border: 1px solid #333333;
+  border-radius: var(--space-md);
 
   &.white-bg {
     background-color: #ffffff;
