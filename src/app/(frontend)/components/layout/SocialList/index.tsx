@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useCallback, useEffect } from 'react'
-import { motion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import ButtonSocial from '../../ui/ButtonSocial'
 import './SocialList.css'
 
@@ -22,6 +22,9 @@ function SocialList({
   const [nearestIndex, setNearestIndex] = useState<number | null>(null)
   const buttonPositions = useRef<Array<{ x: number; y: number }>>([])
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
+  const prefersReducedMotion = useReducedMotion()
+  const ListItem = prefersReducedMotion ? 'li' : motion.li
 
   useEffect(() => {
     const updatePositions = () => {
@@ -85,25 +88,24 @@ function SocialList({
       {socials.map((platform, index) => {
         const pos = buttonPositions.current[index] || { x: 0, y: 0 }
 
+        const animationProps = prefersReducedMotion
+          ? {}
+          : {
+              animate: {
+                x: nearestIndex === index ? (mousePos.x - pos.x) * 0.3 : 0,
+                y: nearestIndex === index ? (mousePos.y - pos.y) * 0.3 : 0,
+              },
+              transition: {
+                type: 'spring' as const,
+                stiffness: 300,
+                damping: 40,
+              },
+            }
+
         return (
-          <motion.li
-            key={platform}
-            animate={{
-              x: nearestIndex === index ? (mousePos.x - pos.x) * 0.3 : 0,
-              y: nearestIndex === index ? (mousePos.y - pos.y) * 0.3 : 0,
-            }}
-            // transition={{
-            //   ease: followEase,
-            //   duration: 0.4,
-            // }}
-            transition={{
-              type: 'spring',
-              stiffness: 300,
-              damping: 40,
-            }}
-          >
+          <ListItem key={platform} {...animationProps}>
             <ButtonSocial platform={platform} size={size} />
-          </motion.li>
+          </ListItem>
         )
       })}
     </ul>
