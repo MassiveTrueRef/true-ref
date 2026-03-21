@@ -2,17 +2,32 @@
 
 import { useRef, useState } from 'react'
 import './ButtonSocial.css'
-import IconFacebook from './IconFacebook'
+import IconDiscord from './IconDiscord'
 import IconInstagram from './IconInstagram'
+import IconPinterest from './IconPinterest'
+import IconBsky from './IconBluesky'
+import IconYoutube from './IconYoutube'
 
 const SOCIALS = {
-  facebook: {
-    Icon: IconFacebook,
-    label: 'Facebook',
+  bluesky: {
+    Icon: IconBsky,
+    label: 'Bluesky',
+  },
+  discord: {
+    Icon: IconDiscord,
+    label: 'Discord',
   },
   instagram: {
     Icon: IconInstagram,
     label: 'Instagram',
+  },
+  pinterest: {
+    Icon: IconPinterest,
+    label: 'Pinterest',
+  },
+  youtube: {
+    Icon: IconYoutube,
+    label: 'YouTube',
   },
 } as const
 

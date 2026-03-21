@@ -1,0 +1,12 @@
+.social-list {
+  display: flex;
+  gap: var(--space-lg);
+  list-style: none;
+  margin: 0;
+  padding: var(--space-lg);
+  position: relative;
+}
+.social-list li {
+  position: relative;
+  will-change: transform;
+}

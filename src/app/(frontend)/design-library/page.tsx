@@ -5,6 +5,7 @@ import Button from '../components/ui/ButtonPill'
 
 import './style.css'
 import ButtonSocial from '../components/ui/ButtonSocial'
+import SocialList from '../components/layout/SocialList'
 
 function DesignLibrary() {
   useEffect(() => {
@@ -25,9 +26,20 @@ function DesignLibrary() {
       </div>
       <h2 id="buttons">Buttons</h2>
       <h3>Social Button</h3>
+      <div className="batch white-bg">
+        <ButtonSocial platform="bluesky" color="black"></ButtonSocial>
+        <ButtonSocial platform="discord" color="black"></ButtonSocial>
+        <ButtonSocial platform="instagram" color="black"></ButtonSocial>
+        <ButtonSocial platform="pinterest" color="black"></ButtonSocial>
+        <ButtonSocial platform="youtube" color="black"></ButtonSocial>
+      </div>
+      <h3>Default Social List</h3>
       <div className="batch">
-        <ButtonSocial platform="facebook"></ButtonSocial>
-        <ButtonSocial platform="instagram" size={40} color="red"></ButtonSocial>
+        <SocialList></SocialList>
+      </div>
+      <h3>Custom Social List</h3>
+      <div className="batch">
+        <SocialList socials={['bluesky', 'discord', 'instagram']}></SocialList>
       </div>
       <h3>Pill Button</h3>
       <div className="batch">
